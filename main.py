@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as uReq
 import logging
+import ssl
 
 logging.basicConfig(filename="scrapper.log", level=logging.INFO)
 import math
@@ -22,7 +23,10 @@ def index():
         try:
             searchString = request.form['content'].replace(" ", "")
             flipkart_url = "https://www.flipkart.com/search?q=" + searchString
-            uClient = uReq(flipkart_url)
+            print(flipkart_url)
+            context = ssl._create_unverified_context()
+            uClient = uReq(flipkart_url, context=context)
+            # uClient = uReq(flipkart_url)
             flipkartPage = uClient.read()
             uClient.close()
             flipkart_html = bs(flipkartPage, "html.parser")
